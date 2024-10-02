@@ -33,7 +33,13 @@ public class CompanyController {
         if (updatedCompany) {
             return new ResponseEntity<>(company, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PostMapping
+    public ResponseEntity<String> addCompany(@RequestBody Company company) {
+        companyService.addCompanies(company);
+        return new ResponseEntity<>("Company successfully created",HttpStatus.CREATED);
+
+    }
 }
