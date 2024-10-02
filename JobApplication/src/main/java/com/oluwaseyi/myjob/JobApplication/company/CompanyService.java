@@ -1,4 +1,10 @@
 package com.oluwaseyi.myjob.JobApplication.company;
 
-public class CompanyService {
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+
+public interface CompanyService {
+    List<Company> getAllCompany();
 }
