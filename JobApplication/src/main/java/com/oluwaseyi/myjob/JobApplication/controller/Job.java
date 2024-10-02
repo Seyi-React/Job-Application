@@ -1,7 +1,16 @@
 package com.oluwaseyi.myjob.JobApplication.controller;
 
+
+import jakarta.persistence.*;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+@Entity
+//@Table(schema = "jobs_table")
 public class Job {
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
     private int minSalary;
@@ -17,6 +26,10 @@ public class Job {
         this.maxSalary = maxSalary;
         this.location = location;
         this.title = title;
+    }
+
+    public Job() {
+
     }
 
     public Long getId() {

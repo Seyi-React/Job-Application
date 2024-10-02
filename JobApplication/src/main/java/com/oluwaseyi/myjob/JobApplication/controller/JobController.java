@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @CrossOrigin("*")
 @RestController
+@RequestMapping("/jobs")
 public class JobController {
 
 
@@ -23,34 +25,48 @@ public class JobController {
         this.jobService = jobService;
     }
 
-    @GetMapping("/jobs")
+    @GetMapping
     public ResponseEntity<List<Job>> findAll () {
         jobService.findAll();
         return new ResponseEntity<>(jobService.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("/jobs")
+    @PostMapping
     public ResponseEntity<String> save(@RequestBody Job job) {
         jobService.save(job);
         return new ResponseEntity<>("Job successfully added", HttpStatus.OK);
     }
 
-    @GetMapping("/jobs/{id}")
-    public ResponseEntity<Job> findById(@PathVariable  Long id) {
-        Job jobById = jobService.findById(id);
-        if(jobById != null) {
-            return  new ResponseEntity<>(jobById, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<Job> findById(@PathVariable Long id) {
+        Optional<Job> jobById = jobService.findById(id);
+
+        if (jobById.isPresent()) {
+            return new ResponseEntity<>(jobById.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(jobById, HttpStatus.NOT_FOUND);
     }
 
 
-    @DeleteMapping("/jobs/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-         jobService.deleteById(id);
-        if(id != null) {
-            return  new ResponseEntity<>("Job successfully deleted", HttpStatus.OK);
+        boolean isDeleted = jobService.deleteById(id);
+
+        if (isDeleted) {
+            return new ResponseEntity<>("Job successfully deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("Job not found", HttpStatus.NOT_FOUND);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update( @PathVariable Long id,   @RequestBody Job updateJob) {
+         boolean updated = jobService.updateJob(id,updateJob);
+         if(updated) {
+             return  new ResponseEntity<>("Job successfully updated", HttpStatus.OK);
+         }
+         return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 }
