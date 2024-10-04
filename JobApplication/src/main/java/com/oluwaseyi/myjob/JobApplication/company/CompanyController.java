@@ -1,11 +1,11 @@
 package com.oluwaseyi.myjob.JobApplication.company;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/companies")
@@ -41,5 +41,14 @@ public class CompanyController {
         companyService.addCompanies(company);
         return new ResponseEntity<>("Company successfully created",HttpStatus.CREATED);
 
+    }
+
+    public ResponseEntity<String> findCompanyById(@PathVariable Long id) {
+      Optional<Company> companyId =  companyService.findCompanyById(id);
+
+      if(companyId.isPresent()) {
+          return new ResponseEntity<>("Company ID Successfully found", HttpStatus.OK);
+      }
+       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -1,6 +1,7 @@
 package com.oluwaseyi.myjob.JobApplication.controller;
 
 
+import com.oluwaseyi.myjob.JobApplication.company.Company;
 import jakarta.persistence.*;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
@@ -18,6 +19,16 @@ public class Job {
     private String location;
     private String title;
 
+    @ManyToOne
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public Job(Long id, String description, int minSalary, int maxSalary, String location, String title) {
         this.id = id;
